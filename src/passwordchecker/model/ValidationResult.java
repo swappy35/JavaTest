@@ -63,8 +63,8 @@ public final class ValidationResult {
     @Override
     public String toString() {
         if (valid) {
-            return "ValidResult";
+            return "ValidResult {valid=true}";
         }
-        return "ValidResult{valid=false, error=" + errors + "}";
+        return "ValidResult {valid=false, error=" + errors + " }";
     }
 }
