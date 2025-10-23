@@ -20,20 +20,21 @@ public class PasswordValidatorImpl implements PasswordValidator {
 
     private final List<ValidationRule> allRules;
     private final ValidationRule notNullRule;
+    private final ValidationRule lowercaseRule;
     private final List<ValidationRule> optionalRules;
     private static final int MIN_LENGTH = 8;
-    private static final int MIN_LENGTH_REQUIRES = 3;
 
     public PasswordValidatorImpl() {
         this.notNullRule = new NotNullRule();
+        this.lowercaseRule = new LowercaseRule();
         this.optionalRules = Arrays.asList(
                 new MinimumLengthRule(MIN_LENGTH),
                 new UppercaseRule(),
-                new LowercaseRule(),
                 new NumberRule()
         );
         this.allRules = new ArrayList<>();
         this.allRules.add(notNullRule);
+        this.allRules.add(lowercaseRule);
         this.allRules.addAll(optionalRules);
 
     }
@@ -70,11 +71,19 @@ public class PasswordValidatorImpl implements PasswordValidator {
      */
     @Override
     public boolean isPasswordOk(String password) {
+        //null check
         try {
             notNullRule.validate(password);
         } catch (PasswordValidationException e) {
             return false;
         }
+        //lowercase check
+        try {
+            lowercaseRule.validate(password);
+        } catch (PasswordValidationException e){
+            return false;
+        }
+        // 1 of 3 conditions must meet
         long passedRules = optionalRules.parallelStream().filter(rule -> {
             try {
                 rule.validate(password);
@@ -83,6 +92,6 @@ public class PasswordValidatorImpl implements PasswordValidator {
                 return false;
             }
         }).count();
-        return passedRules >= (MIN_LENGTH_REQUIRES - 1);
+        return passedRules >= 1;
     }
 }

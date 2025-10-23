@@ -24,7 +24,7 @@ javac -d bin exception/*.java model/*.java rule/*.java service/*.java Main.java
 Compile test files:
 
 ```bash
-javac -cp bin -d bin PasswordValidatorTest.java
+javac -d bin PasswordValidatorTest.java
 ```
 
 ## Running the Application
@@ -55,7 +55,7 @@ The system implements 5 validation rules:
 
 **Strict Mode** - All 5 rules must pass. Returns a ValidationResult object with detailed error messages if validation fails.
 
-**Easy Mode** - At least 3 of 5 rules must pass, but the not-null rule is mandatory. Returns a boolean value indicating if the password is acceptable.
+**Easy Mode** - At least 3 of 5 rules must pass, but the not-null and lowercase rule is mandatory. Returns a boolean value indicating if the password is acceptable.
 
 ## Usage
 
@@ -63,7 +63,7 @@ The PasswordValidator interface provides two methods:
 
 **validate(String password)** - Performs strict validation and returns a ValidationResult containing validation status and any error messages.
 
-**isPasswordOk(String password)** - Performs relaxed validation and returns true if the password meets minimum requirements (not null and at least 3 of 5 rules pass).
+**isPasswordOk(String password)** - Performs easy validation and returns true if the password meets minimum requirements (not null, lowercase and at least 1 of 3 other rules pass).
 
 ### Basic Usage Pattern
 
